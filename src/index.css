@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-page: #f0f2f5;
+    --bg-card: #ffffff;
+    --bg-elevated: #f7f8fa;
+    --bg-primary: #f7f8fa;
+    --bg-dark: #1a1a2e;
+    --text-primary: #1a1a2e;
+    --text-secondary: #5a5a6e;
+    --text-tertiary: #a0a0b0;
+    --accent: #e63946;
+    --accent-light: #fde8e8;
+    --accent-gradient: linear-gradient(135deg, #e63946 0%, #f4a261 100%);
+    --success: #2a9d8f;
+    --success-light: #e6f7f5;
+    --warning: #f4a261;
+    --warning-light: #fff4e6;
+    --info: #3a86ff;
+    --info-light: #e8f1ff;
+    --gold: #f4a261;
+    --map-water: #dbeafe;
+    --map-land: #f1f5f9;
+    --map-hot: #e63946;
+    --map-dark-land: #1e293b;
+    --map-dark-water: #0f172a;
+    --divider: #e8e8e8;
+
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 20px;
+    --space-2xl: 24px;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-xl: 0 8px 24px rgba(0,0,0,0.12);
+    --shadow-immersive: 0 -4px 20px rgba(0,0,0,0.3);
+    --shadow-float: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-card: 0 2px 8px rgba(0,0,0,0.06);
+
+    --font-display: 700 24px / 1.2 -0.02em;
+    --font-h1: 600 20px / 1.3 -0.01em;
+    --font-h2: 600 16px / 1.4 0;
+    --font-h3: 600 14px / 1.4 0;
+    --font-body: 400 14px / 1.6 0;
+    --font-caption: 400 12px / 1.4 0.01em;
+    --font-micro: 500 10px / 1.2 0.02em;
+
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent-hsl: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.625rem;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
