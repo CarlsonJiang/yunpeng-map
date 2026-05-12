@@ -4,3 +4,9 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+export function asset(path: string): string {
+  const base = import.meta.env.BASE_URL
+  if (path.startsWith('/')) path = path.slice(1)
+  return `${base}${path}`
+}

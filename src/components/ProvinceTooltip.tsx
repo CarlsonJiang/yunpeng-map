@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Package, ChevronRight } from 'lucide-react';
+import { MapPin, Package, ChevronRight, X } from 'lucide-react';
 import type { ProvinceData } from '@/types';
 import { getContentsByProvince } from '@/data/mockData';
 
@@ -10,11 +10,16 @@ interface ProvinceTooltipProps {
   onEnter?: (provinceId: string) => void;
 }
 
-export default function ProvinceTooltip({ province, position, onClose: _onClose, onEnter }: ProvinceTooltipProps) {
+export default function ProvinceTooltip({ province, position, onClose, onEnter }: ProvinceTooltipProps) {
   if (!province) return null;
 
   const contents = getContentsByProvince(province.id).slice(0, 3);
   const tags = province.hot ? [province.hot, ...province.products.slice(0, 2)] : province.products.slice(0, 3);
+  const viewportWidth = typeof window === 'undefined' ? 430 : window.innerWidth;
+  const viewportHeight = typeof window === 'undefined' ? 760 : window.innerHeight;
+  const popupWidth = Math.min(260, viewportWidth - 32);
+  const left = Math.min(Math.max(position.x, popupWidth / 2 + 12), viewportWidth - popupWidth / 2 - 12);
+  const top = Math.min(Math.max(position.y, 220), viewportHeight - 16);
 
   return (
     <AnimatePresence>
@@ -23,14 +28,13 @@ export default function ProvinceTooltip({ province, position, onClose: _onClose,
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 8, scale: 0.95 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="pointer-events-auto absolute z-50"
+        className="pointer-events-auto fixed z-[70]"
         style={{
-          left: position.x,
-          top: position.y,
+          left,
+          top,
           transform: 'translate(-50%, -100%)',
           marginTop: '-12px',
-          minWidth: '200px',
-          maxWidth: '280px',
+          width: popupWidth,
           background: 'rgba(255,255,255,0.95)',
           backdropFilter: 'blur(8px)',
           borderRadius: 'var(--radius-md)',
@@ -45,6 +49,14 @@ export default function ProvinceTooltip({ province, position, onClose: _onClose,
         >
           {province.name}
         </h3>
+        <button
+          onClick={onClose}
+          className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full"
+          style={{ background: 'var(--bg-page)' }}
+          aria-label="关闭省份弹窗"
+        >
+          <X size={14} color="var(--text-tertiary)" />
+        </button>
 
         <div className="mt-1 flex items-center gap-3" style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
           <span className="flex items-center gap-1">

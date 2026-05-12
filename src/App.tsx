@@ -16,6 +16,7 @@ import MerchantDashboard from '@/pages/MerchantDashboard';
 import MerchantContent from '@/pages/MerchantContent';
 import ContentEditor from '@/pages/ContentEditor';
 import ContentAnalytics from '@/pages/ContentAnalytics';
+import AiBatchListing from '@/pages/AiBatchListing';
 import PartnerDashboard from '@/pages/PartnerDashboard';
 import AdminContentReview from '@/pages/AdminContentReview';
 
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/merchant/content" element={<MerchantContent />} />
           <Route path="/merchant/content/edit/:id" element={<ContentEditor />} />
           <Route path="/merchant/content/analytics" element={<ContentAnalytics />} />
+          <Route path="/merchant/ai-batch-listing" element={<AiBatchListing />} />
 
           <Route path="/partner/dashboard" element={<PartnerDashboard />} />
 
@@ -52,3 +54,4 @@ export default function App() {
     </CartProvider>
   );
 }
+

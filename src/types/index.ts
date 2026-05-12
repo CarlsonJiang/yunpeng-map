@@ -130,6 +130,71 @@ export interface RelatedProduct {
   displayPosition: 'floating' | 'inline';
 }
 
+// ─── AI Batch Listing / Map Layer ─────────────────────────
+export type ListingKind = 'specialty' | 'activity';
+
+export interface TraceabilityInfo {
+  origin: string;
+  producer: string;
+  certification: string;
+  code: string;
+  confidence: number;
+}
+
+export interface AiBatchListingDraft {
+  id: string;
+  kind: ListingKind;
+  provinceId: string;
+  provinceName: string;
+  cityName: string;
+  title: string;
+  sellingPoint: string;
+  generatedTitle: string;
+  generatedContent: string;
+  priceLabel: string;
+  groupLabel?: string;
+  bargainLabel?: string;
+  couponLabel: string;
+  traceability: TraceabilityInfo;
+  mapPoint: {
+    x: number;
+    y: number;
+    heatValue: number;
+  };
+  assets: {
+    coverImage: string;
+    sourceImages: number;
+    videoClips: number;
+  };
+  tags: string[];
+  status: 'ready' | 'needs_review' | 'published';
+  riskNotes: string[];
+  linkedProductId?: string;
+  linkedActivityId?: string;
+}
+
+export interface MapLayerItem {
+  id: string;
+  kind: ListingKind;
+  title: string;
+  subtitle: string;
+  provinceId: string;
+  provinceName: string;
+  cityName?: string;
+  x: number;
+  y: number;
+  image: string;
+  heatValue: number;
+  priceLabel: string;
+  statusLabel: string;
+  traceabilityLabel?: string;
+  couponLabel?: string;
+  groupLabel?: string;
+  sourceId: string;
+  sourceType: 'product' | 'activity';
+  tags: string[];
+}
+
 // ─── Content Comment ─────────────────────────────────
 export interface ContentComment {
   id: string;

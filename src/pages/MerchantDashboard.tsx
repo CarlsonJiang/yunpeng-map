@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, FileText, Package, TrendingUp, Eye, Heart, ShoppingBag, Plus, BarChart3, Settings, ChevronRight } from 'lucide-react';
+import { ArrowLeft, FileText, Package, TrendingUp, Eye, Heart, ShoppingBag, Plus, BarChart3, Settings, ChevronRight, Sparkles } from 'lucide-react';
 import { mockContentItems, mockProducts } from '@/data/mockData';
 import { useToast } from '@/context/ToastContext';
 
@@ -72,8 +72,9 @@ export default function MerchantDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="mx-4 mt-3 grid grid-cols-3 gap-2">
+      <div className="mx-4 mt-3 grid grid-cols-4 gap-2">
         {[
+          { label: 'AI上架', icon: Sparkles, path: '/merchant/ai-batch-listing', color: '#8B5CF6' },
           { label: '发布内容', icon: Plus, path: '/merchant/content/edit/new', color: '#3B82F6' },
           { label: '内容管理', icon: FileText, path: '/merchant/content', color: '#10B981' },
           { label: '数据分析', icon: BarChart3, path: '/merchant/content/analytics', color: '#F59E0B' },

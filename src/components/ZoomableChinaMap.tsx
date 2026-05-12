@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Plus, Minus, RotateCcw, Navigation } from 'lucide-react';
-import type { ProvinceData } from '@/types';
+import type { ListingKind, MapLayerItem, ProvinceData } from '@/types';
 import { provinceData } from '@/data/mockData';
 import chinaGeoJSON from '@/data/china-provinces.json';
 import type { GeoCollection } from '@/utils/mapProjection';
@@ -13,6 +13,9 @@ interface Props {
   onProvinceSelect?: (id: string | null) => void;
   selectedProvince?: string | null;
   height?: string;
+  layerItems?: MapLayerItem[];
+  activeLayer?: ListingKind | 'all';
+  onLayerItemSelect?: (item: MapLayerItem) => void;
 }
 
 const REGION_COLORS: Record<string, { fill: string; stroke: string; hover: string; select: string }> = {
@@ -25,7 +28,14 @@ const REGION_COLORS: Record<string, { fill: string; stroke: string; hover: strin
   northwest: { fill: '#fff7ed', stroke: '#e8c8a0', hover: '#ffedd5', select: '#fdba74' },
 };
 
-export default function ZoomableChinaMap({ onProvinceSelect, selectedProvince, height = '58vh' }: Props) {
+export default function ZoomableChinaMap({
+  onProvinceSelect,
+  selectedProvince,
+  height = '58vh',
+  layerItems = [],
+  activeLayer = 'all',
+  onLayerItemSelect,
+}: Props) {
   const navigate = useNavigate();
   const [scale, setScale] = useState(1.1);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
@@ -37,7 +47,7 @@ export default function ZoomableChinaMap({ onProvinceSelect, selectedProvince, h
   const lastTap = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const geoCollection = chinaGeoJSON as unknown as GeoCollection;
+  const geoCollection = useMemo(() => chinaGeoJSON as unknown as GeoCollection, []);
 
   const provinceFeatures = useMemo(() => {
     const result: Array<{ feature: typeof geoCollection.features[0]; province: ProvinceData | undefined; path: string; centroid: [number, number] }> = [];
@@ -49,7 +59,14 @@ export default function ZoomableChinaMap({ onProvinceSelect, selectedProvince, h
       result.push({ feature, province, path, centroid });
     }
     return result;
-  }, [geoCollection.features]);
+  }, [geoCollection]);
+
+  const visibleLayerItems = useMemo(() => {
+    const filtered = activeLayer === 'all'
+      ? layerItems
+      : layerItems.filter(item => item.kind === activeLayer);
+    return filtered.slice(0, 42);
+  }, [activeLayer, layerItems]);
 
   const handleZoomIn = useCallback(() => setScale(s => Math.min(s * 1.25, 6)), []);
   const handleZoomOut = useCallback(() => setScale(s => Math.max(s / 1.25, 0.4)), []);
@@ -260,6 +277,81 @@ export default function ZoomableChinaMap({ onProvinceSelect, selectedProvince, h
                 >
                   {province.specialty}
                 </text>
+              </g>
+            );
+          })}
+
+          {/* Fixed city-activity style business layer */}
+          {visibleLayerItems.map((item, index) => {
+            const x = item.x * 10;
+            const y = item.y * 8;
+            const isSpecialty = item.kind === 'specialty';
+            const accent = isSpecialty ? '#16a34a' : '#f97316';
+            const fill = isSpecialty ? '#dcfce7' : '#ffedd5';
+            const label = isSpecialty ? '农' : '文';
+            const radius = Math.min(22, Math.max(11, 9 + item.heatValue / 1800));
+            const showLabel = index < 16 || item.heatValue > 9500;
+            const labelText = item.title.length > 10 ? `${item.title.slice(0, 10)}...` : item.title;
+
+            return (
+              <g
+                key={item.id}
+                transform={`translate(${x}, ${y})`}
+                style={{ cursor: 'pointer' }}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onLayerItemSelect?.(item);
+                }}
+              >
+                <circle cx="0" cy="0" r={radius + 5} fill={accent} opacity="0.16" />
+                <circle cx="0" cy="0" r={radius} fill="white" stroke={accent} strokeWidth="2.2" />
+                <circle cx="0" cy="0" r={radius - 4} fill={fill} />
+                <text
+                  x="0"
+                  y="4"
+                  textAnchor="middle"
+                  fontSize={radius > 17 ? 13 : 11}
+                  fontWeight="800"
+                  fill={accent}
+                  style={{ fontFamily: 'system-ui, sans-serif' }}
+                >
+                  {label}
+                </text>
+                {showLabel && (
+                  <g transform={`translate(${radius + 7}, -${radius + 3})`}>
+                    <rect
+                      x="0"
+                      y="0"
+                      width={labelText.length * 9 + 54}
+                      height="32"
+                      rx="8"
+                      fill="white"
+                      fillOpacity="0.94"
+                      stroke={accent}
+                      strokeOpacity="0.2"
+                    />
+                    <text
+                      x="9"
+                      y="13"
+                      fontSize="10"
+                      fontWeight="800"
+                      fill="#172033"
+                      style={{ fontFamily: 'system-ui, sans-serif' }}
+                    >
+                      {labelText}
+                    </text>
+                    <text
+                      x="9"
+                      y="25"
+                      fontSize="9"
+                      fontWeight="700"
+                      fill={accent}
+                      style={{ fontFamily: 'system-ui, sans-serif' }}
+                    >
+                      {item.priceLabel}
+                    </text>
+                  </g>
+                )}
               </g>
             );
           })}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Search, Filter, Edit3, BarChart3, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, Search, Filter, Edit3, BarChart3, Trash2, Sparkles } from 'lucide-react';
 import { mockContentItems } from '@/data/mockData';
 import type { ContentStatus, ContentType } from '@/types';
 import { useToast } from '@/context/ToastContext';
@@ -34,7 +34,7 @@ export default function MerchantContent() {
     return true;
   });
 
-  const handleDelete = (_id: string) => {
+  const handleDelete = () => {
     showToast('内容已删除', 'success');
   };
 
@@ -86,6 +86,14 @@ export default function MerchantContent() {
             style={{ background: showFilters ? 'var(--accent)' : 'var(--bg-page)' }}
           >
             <Filter size={16} color={showFilters ? '#fff' : 'var(--text-secondary)'} />
+          </button>
+          <button
+            onClick={() => navigate('/merchant/ai-batch-listing')}
+            className="flex h-9 w-9 items-center justify-center rounded-full"
+            style={{ background: '#8B5CF6' }}
+            title="AI批量上架"
+          >
+            <Sparkles size={16} color="#fff" />
           </button>
           <button
             onClick={() => navigate('/merchant/content/edit/new')}
@@ -183,7 +191,7 @@ export default function MerchantContent() {
                   <BarChart3 size={12} /> 数据
                 </button>
                 <button
-                  onClick={() => handleDelete(content.id)}
+                  onClick={handleDelete}
                   className="flex flex-1 items-center justify-center gap-1 rounded-lg py-1.5 text-xs font-medium"
                   style={{ background: '#EF444415', color: '#EF4444' }}
                 >
