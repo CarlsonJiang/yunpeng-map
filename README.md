@@ -1,4 +1,6 @@
-# React + TypeScript + Vite
+# yunpeng-map
+
+React + TypeScript + Vite prototype for the 云蓬地图 / 神州风采助农地图小程序.
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
